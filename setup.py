@@ -73,7 +73,7 @@ try:
 except OSError: # Does not exist
     pass
 fd = open(os.path.join('src', 'version.py'), 'a')
-fd.write("version = '0.83.4.1+limnoria %s'\n" % version)
+fd.write("version = '0.83.4.1+limnoria corona+%s'\n" % version)
 fd.close()
 
 if sys.version_info < (2, 6, 0):

@@ -1,3 +1,6 @@
+**This repository contains GLolol's fork of Limnoria.** The **`corona`** branch (which you are on right now) contains parts specific to my bots, and the 
+**`testing`** branch is used as a base for pull requests.
+<hr>
 Supybot is a robust (it doesn't crash), user friendly (it's easy to
 configure) and programmer friendly (plugins are *extremely* easy to
 write) Python IRC bot.  It aims to be an adequate replacement for most

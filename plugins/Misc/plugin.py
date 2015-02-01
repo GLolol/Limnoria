@@ -339,16 +339,14 @@ class Misc(callbacks.Plugin):
                 if sys.version_info[0] < 3 and isinstance(version, unicode):
                     version = version.encode('utf8')
                 versions[branch] = version
-            newest = _('The newest versions available online are %s.') % \
+            newest = _('Upstream releases: %s.') % \
                     ', '.join([_('%s (in %s)') % (y,x)
                                for x,y in versions.items()])
         except utils.web.Error as e:
             self.log.info('Couldn\'t get website version: %s', e)
-            newest = _('I couldn\'t fetch the newest version '
-                     'from the Limnoria repository.')
         s = _('The current (running) version of this Supybot is %s, '
-              'running on Python %s.  %s') % \
-            (conf.version, sys.version.replace('\n', ' '), newest)
+              'running on Python %s. %s') % \
+            (conf.version, sys.version.split('\n')[0].strip(), newest)
         irc.reply(s)
     version = wrap(thread(version))
 
@@ -358,7 +356,8 @@ class Misc(callbacks.Plugin):
 
         Returns a URL saying where to get Limnoria.
         """
-        irc.reply(_('My source is at https://github.com/ProgVal/Limnoria'))
+        irc.reply(_('My source is at https://github.com/GLolol/Limnoria. '
+                    'Upstream: https://github.com/ProgVal/Limnoria'))
     source = wrap(source)
 
     @internationalizeDocstring
