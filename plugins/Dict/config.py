@@ -51,5 +51,9 @@ conf.registerChannelValue(Dict, 'default',
 conf.registerChannelValue(Dict, 'inPrivate',
     registry.Boolean(False, _("""Determines whether the output of the 'dict'
     command will be sent in private in order to reduce flooding.""")))
+conf.registerChannelValue(Dict, 'showWhichResponded',
+    registry.Boolean(True, _("""Determines whether the bot will show which
+    dictionaries responded to a query, if the selected dictionary is '*'.
+    """)))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
