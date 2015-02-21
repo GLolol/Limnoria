@@ -122,11 +122,13 @@ class Dict(callbacks.Plugin):
             s = utils.str.normalizeWhitespace(s).rstrip(';.,')
             L.append('%s: %s' % (db, s))
         utils.sortBy(len, L)
-        if dictionary == '*' and len(dbs) > 1:
+        if dictionary == '*' and len(dbs) > 1 and \
+                self.registryValue("showWhichResponded", msg.args[0]):
             s = format(_('%L responded: %s'), list(dbs), '; '.join(L))
         else:
             s = '; '.join(L)
-        irc.reply(s)
+        private = self.registryValue('inPrivate', msg.args[0])
+        irc.reply(s, private=private)
     dict = wrap(dict, [many('something')])
 
     def synonym(self, irc, msg, args, words):
