@@ -6,10 +6,10 @@
 MANIFEST
 backup/
 build/
-debian/compat
 debian/files
 debian/limnoria*
 debian/python-module-stampdir/
+.pybuild
 dist/
 docs/_build/
 docs/plugins/

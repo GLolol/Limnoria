@@ -1,3 +1,14 @@
+limnoria (2015.02.25+corona1) unstable; urgency=medium
+
+  * Import snapshot Limnoria+corona 2015.02.25.
+  * Bring package up to standards (3.9.6)
+    - Add debian/compat, debian/source
+    - Remove empty postinst & postrm files.
+  * Switching build system to pybuild, building only the Python 3 version.
+  * Disable tests (they don't work yet with the custom defaults).
+
+ -- James Lu <glolol@overdrive.pw>  Wed, 25 Feb 2015 18:23:17 -0800
+
 limnoria (0.83.4.1+limnoria2) unstable; urgency=low
 
   * New upstream version.
