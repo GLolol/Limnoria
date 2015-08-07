@@ -70,4 +70,16 @@ conf.registerChannelValue(Karma, 'onlyNicks',
     registry.Boolean(False, _("""Determines whether the bot will
     only increase/decrease karma for nicks in the current channel.""")))
 
+conf.registerGroup(Karma, 'ratelimit')
+conf.registerChannelValue(Karma.ratelimit, 'maximum',
+    registry.NonNegativeInteger(2, _("""Determines the maximum amount of times
+    one can set karma within the time specified in supybot.plugins.
+    Karma.ratelimit.timeout. If this is set to zero, Karma rate limiting
+    will be disabled.""")))
+conf.registerChannelValue(Karma.ratelimit, 'timeout',
+    registry.NonNegativeInteger(0, _("""Determines the timeout for each Karma
+    query, used for Karma rate limiting. If this is set to zero, Karma
+    rate limiting will be disabled.""")))
+
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:

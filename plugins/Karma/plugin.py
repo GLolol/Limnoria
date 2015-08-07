@@ -39,6 +39,7 @@ import supybot.plugins as plugins
 import supybot.ircmsgs as ircmsgs
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
+from supybot.utils.structures import TimeoutQueue
 from supybot.i18n import PluginInternationalization, internationalizeDocstring
 _ = PluginInternationalization('Karma')
 
@@ -225,6 +226,7 @@ class Karma(callbacks.Plugin):
         self.__parent = super(Karma, self)
         self.__parent.__init__(irc)
         self.db = KarmaDB()
+        self.karmacounters = ircutils.IrcDict()
 
     def die(self):
         self.__parent.die()
@@ -248,6 +250,8 @@ class Karma(callbacks.Plugin):
         dec = self.registryValue('decrementChars', channel)
         onlynicks = self.registryValue('onlyNicks', channel)
         karma = ''
+        maxkarma = self.registryValue('ratelimit.maximum', channel)
+        timeout = self.registryValue('ratelimit.timeout', channel)
         for s in inc:
             if thing.endswith(s):
                 thing = thing[:-len(s)]
@@ -259,6 +263,10 @@ class Karma(callbacks.Plugin):
                     not self.registryValue('allowSelfRating', channel):
                         irc.error(_('You\'re not allowed to adjust your own karma.'))
                         return
+                if maxkarma and msg.nick in self.karmacounters and len(self.karmacounters[msg.nick]) > maxkarma:
+                    # irc.error() doesn't work here; it raises callbacks.Errors in logs instead
+                    irc.queueMsg(ircmsgs.privmsg(channel, _("You have attempted to set too much karma recently; please try again later.")))
+                    return
                 self.db.increment(channel, self._normalizeThing(thing))
                 karma = self.db.get(channel, self._normalizeThing(thing))
         for s in dec:
@@ -271,9 +279,16 @@ class Karma(callbacks.Plugin):
                     not self.registryValue('allowSelfRating', channel):
                     irc.error(_('You\'re not allowed to adjust your own karma.'))
                     return
+                if maxkarma and msg.nick in self.karmacounters and len(self.karmacounters[msg.nick]) > maxkarma:
+                    irc.queueMsg(ircmsgs.privmsg(channel, _("You have attempted to set too much karma recently; please try again later.")))
+                    return
                 self.db.decrement(channel, self._normalizeThing(thing))
                 karma = self.db.get(channel, self._normalizeThing(thing))
         if karma:
+            if timeout:
+                if msg.nick not in self.karmacounters:
+                    self.karmacounters[msg.nick] = TimeoutQueue(timeout)
+                self.karmacounters[msg.nick].enqueue(thing)
             self._respond(irc, channel, thing, karma[0]-karma[1])
 
     def invalidCommand(self, irc, msg, tokens):
