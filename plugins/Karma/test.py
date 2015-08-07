@@ -32,7 +32,7 @@ from supybot.test import *
 import sqlite3
 
 class KarmaTestCase(ChannelPluginTestCase):
-    plugins = ('Karma',)
+    plugins = ('Karma', 'Owner')
     def testKarma(self):
         self.assertError('karma')
         self.assertRegexp('karma foobar', 'neutral karma')
@@ -221,4 +221,21 @@ class KarmaTestCase(ChannelPluginTestCase):
         finally:
             karma.onlynicks.setValue(onlynicks)
             karma.response.setValue(resp)
+
+    def testRatelimit(self):
+         # Ratelimit is disabled in the default config, reflect this.
+         for _ in range(3):
+             self.assertSnarfRegexp('abcdef++', 'is now')
+             self.assertSnarfRegexp('abcdef--', 'is now')
+         # Clear the karma lists from earlier tests.
+         self.assertNotError('reload Karma')
+         with conf.supybot.plugins.Karma.ratelimit.maximum.context(2) and \
+                 conf.supybot.plugins.Karma.ratelimit.timeout.context(30) and \
+                 conf.supybot.plugins.Karma.response.context(True):
+             self.assertSnarfRegexp('abcdef++', 'is now')
+             self.assertSnarfRegexp('abcdef--', 'is now')
+             # After two consecutive karma increments from one sender within
+             # 30 seconds (the timeout variable), we should error out.
+             self.assertError('abcdef++')
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
