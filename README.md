@@ -1,3 +1,6 @@
+**This branch contains GLolol's fork of Limnoria.** If any bugs occur, please try to reproduce it with stock Limnoria before asking for help on any of its support channels.
+<hr>
+
 Supybot is a robust (it doesn't crash), user friendly (it's easy to
 configure) and programmer friendly (plugins are *extremely* easy to
 write) Python IRC bot.  It aims to be an adequate replacement for most
