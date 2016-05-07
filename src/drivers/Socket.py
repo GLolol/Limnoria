@@ -279,13 +279,6 @@ class SocketDriver(drivers.IrcDriver, drivers.ServersMixin):
             self.conn.connect((address, port))
             if network_config.ssl():
                 self.starttls()
-            elif not network_config.requireStarttls():
-                drivers.log.warning(('Connection to network %s '
-                    'does not use SSL/TLS, which makes it vulnerable to '
-                    'man-in-the-middle attacks and passive eavesdropping. '
-                    'You should consider upgrading your connection to SSL/TLS '
-                    '<http://doc.supybot.aperio.fr/en/latest/use/faq.html#how-to-make-a-connection-secure>')
-                    % self.irc.network)
 
             def setTimeout():
                 self.conn.settimeout(conf.supybot.drivers.poll())
@@ -362,11 +355,6 @@ class SocketDriver(drivers.IrcDriver, drivers.ServersMixin):
                     certfile)
             certfile = None
         verifyCertificates = conf.supybot.protocols.ssl.verifyCertificates()
-        if not verifyCertificates:
-            drivers.log.warning('Not checking SSL certificates, connections '
-                    'are vulnerable to man-in-the-middle attacks. Set '
-                    'supybot.protocols.ssl.verifyCertificates to "true" '
-                    'to enable validity checks.')
         try:
             self.conn = utils.net.ssl_wrap_socket(self.conn,
                     logger=drivers.log, hostname=self.server[0],
