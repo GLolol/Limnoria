@@ -836,6 +836,11 @@ def standardSubstitute(irc, msg, text, env=None):
             })
         if msg.reply_env:
             vars.update(msg.reply_env)
+    else:  # Fill in nick values as CONSOLE if msg is not given.
+        vars.update({
+            'who': '<CONSOLE>',
+            'nick': '<CONSOLE>',
+        })
 
     if irc and msg:
         if isChannel(msg.args[0]):
