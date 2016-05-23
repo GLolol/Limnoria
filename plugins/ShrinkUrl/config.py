@@ -50,11 +50,11 @@ class ShrinkCycle(registry.SpaceSeparatedListOfStrings):
     Value = ShrinkService
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(ShrinkCycle, self).__init__(*args, **kwargs)
         self.lastIndex = -1
 
     def setValue(self, v):
-        super().setValue(v)
+        super(self.__class__, self).setValue(v)
         self.lastIndex = -1
 
     def getService(self):
