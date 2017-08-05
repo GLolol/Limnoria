@@ -419,7 +419,7 @@ class Unix(callbacks.Plugin):
         if result[0]: # stdout
             response = result[0].decode('utf8').splitlines()
             response = [l for l in response if l]
-            irc.replies(response)
+            irc.replies(response, '', ' ')
     call = thread(wrap(call, ["owner", "text"]))
 
     def shell(self, irc, msg, args, text):
@@ -451,7 +451,7 @@ class Unix(callbacks.Plugin):
         if result[0]: # stdout
             response = result[0].decode('utf8').splitlines()
             response = [l for l in response if l]
-            irc.replies(response)
+            irc.replies(response, '', ' ')
     shell = thread(wrap(shell, ["owner", "text"]))
 
 

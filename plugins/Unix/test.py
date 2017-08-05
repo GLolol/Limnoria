@@ -157,7 +157,7 @@ if os.name == 'posix':
 
         def testCall(self):
             self.assertNotError('unix call /bin/ls /')
-            self.assertRegexp('unix call /bin/ls /', 'boot, .*dev, ')
+            self.assertRegexp('unix call /bin/ls /', 'boot .*dev ')
             self.assertError('unix call /usr/bin/nosuchcommandaoeuaoeu')
 
         def testUptime(self):
